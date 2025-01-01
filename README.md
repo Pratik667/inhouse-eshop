@@ -1,10 +1,10 @@
-# Inhouse E-Shop
+#Inhouse E-Shop
 
 Inhouse E-Shop is a modern e-commerce platform built with **Node.js**, **Express.js**, and **TypeScript**. This project allows users to register, login, manage products, and perform other e-commerce operations.
 
 ![Inhouse E-Shop](https://via.placeholder.com/800x200.png?text=Inhouse+E-Shop)
 
-## 🚀 Table of Contents
+##🚀 Table of Contents
 
 - [Prerquisites](#prerequisites)
 - [Getting Started](#getting-started)
@@ -17,7 +17,7 @@ Inhouse E-Shop is a modern e-commerce platform built with **Node.js**, **Express
 
 ---
 
-## 🛠️ Prerequisites
+##🛠️ Prerequisites
 
 Before you begin, ensure you have the following installed on your local machine:
 
@@ -33,7 +33,7 @@ npm -v
 git --version
 ```
 
-## ⚡ Getting Started
+##⚡ Getting Started
 Follow the steps below to set up the project locally:
 
 1. Clone the Repository
@@ -52,7 +52,7 @@ cd inhouse-eshop
 npm install
 ```
 
-## 🚀 Run the App Locally
+##🚀 Run the App Locally
 1. Set Up Environment Variables
 Create a .env file in the root directory and add the following variables:
 
@@ -83,7 +83,7 @@ npm run build
 npm start
 ```
 
-## 🛣️ Routes
+##🛣️ Routes
 User Routes
 POST /api/users/register: Register a new user.
 POST /api/users/login: Login a user.
@@ -98,7 +98,7 @@ GET /api/products/:id: Get a product by ID.
 PUT /api/products/:id: Update a product (Admin or Manager only).
 DELETE /api/products/:id: Delete a product (Admin or Manager only).
 
-🗂️ Project Structure
+##🗂️ Project Structure
 The project structure is organized into several key folders and files:
 
 bash
