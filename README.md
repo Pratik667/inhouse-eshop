@@ -6,13 +6,13 @@ Inhouse E-Shop is a modern e-commerce platform built with **Node.js**, **Express
 
 ## 🚀 Table of Contents
 
-- [Prerquisites](#prerequisites)
-- [Getting Started](#getting-started)
-- [Run the App Locally](#run-the-app-locally)
-- [Routes](#routes)
-- [Project Structure](#project-structure)
+- [Prerquisites](#%EF%B8%8F-prerequisites)
+- [Getting Started](#-getting-started)
+- [Run the App Locally](#-run-the-app-locally)
+- [Routes](#%EF%B8%8F-routes)
+- [Project Structure](#%EF%B8%8F-project-structure)
 - [Technologies Used](#-technologies-used)
-- [Contributing](#contributing)
+- [Contributing](#-contributing)
 - [License](#-license)
 
 ---
