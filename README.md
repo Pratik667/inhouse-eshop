@@ -93,7 +93,8 @@ User Routes
 - PATCH /api/users/update-user/:userId: Update a user (Admin only).
 - DELETE /api/users/delete-user/:userId: Delete a user (Admin only).
 - GET /api/users/team-users: Get users in the same team (Managers only).
-- Product Routes
+
+Product Routes
 - POST /api/products: Create a new product (Admin or Manager only).
 - GET /api/products: Get all products.
 - GET /api/products/:id: Get a product by ID.
