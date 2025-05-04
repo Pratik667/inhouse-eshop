@@ -23,14 +23,16 @@ export const registerUser = async (req: Request, res: Response): Promise<any> =>
 // Login User
 export const loginUser = async (req: Request, res: Response): Promise<any> => {
   const { email, password } = req.body;
-
+  console.log("Inside Login user");
   try {
     const user = await User.findOne({ email });
+    console.log(`User data: ${user}`);
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
 
     const isMatch = await user.comparePassword(password); // Compare password
+    console.log(`User data: ${isMatch}`);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
@@ -40,14 +42,17 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
     });
 
     // Set token in response headers
+    console.log(`setting header`);
     res.setHeader("Authorization", `Bearer ${token}`);
 
+    console.log(`all done`);
     // Return success response with token
     return res.status(200).json({
       message: "Login successful",
       token,
     });
   } catch (error: any) {
+    console.log("Failed in catch");
     return res.status(500).json({ message: "Server error", error: error.message });
   }
 };
@@ -114,6 +119,19 @@ export const getUsersInSameTeam = async (req: IGetUserAuthInfoRequest, res: Resp
   } catch (error: any) {
     console.error("Error fetching team users:", error);
     return res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+export const getUserByID= async (req: Request, res: Response): Promise<any> => {
+  const { userId } = req.params;
+  try {
+    const user = await User.findById(userId);
+    res.status(200).json({
+      message: user
+    });
+  } catch (error: any) {
+    console.error("Error fetching user:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
