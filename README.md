@@ -101,6 +101,16 @@ Product Routes
 - PUT /api/products/:id: Update a product (Admin or Manager only).
 - DELETE /api/products/:id: Delete a product (Admin or Manager only).
 
+Cart Routes
+- POST /api/cart/add: Add a product to the Cart
+- POST /api/cart/remove: Removes a product from the cart
+- GET /api/cart/:userId: Views products inside cart using User Id.
+
+Wishlist Routes
+- POST /api/wishlist/add: Adds Product to wishlist
+- POST /api/wishlist/remove: Removes Product from wishlist
+- GET /api/wishlist/:userId: Views products inside wishlist using User Id.
+
 ## 🗂️ Project Structure
 The project structure is organized into several key folders and files:
 
@@ -123,6 +133,7 @@ Copy code
 - **Nodemon**: For automatically restarting the app during development.
 - **bcryptjs**: For password hashing.
 - **dotenv**: For environment variable management.
+- **Jest**: For Test Coverage.
 
 ## 🤝 Contributing
 Contributions are welcome! Here's how you can help:
