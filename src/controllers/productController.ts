@@ -45,7 +45,7 @@ export const createProduct = async (req: Request, res: Response): Promise<any> =
 // Get all products
 export const getAllProducts = async (_req: Request, res: Response): Promise<any> => {
   try {
-    const products = await Product.find({ isActive: true }); // Only fetch active products
+    const products = await Product.find();
     return res.status(200).json(products);
   } catch (error: any) {
     console.error("Error fetching products:", error);
@@ -58,8 +58,8 @@ export const getProductById = async (req: Request, res: Response): Promise<any> 
   try {
     const product = await Product.findById(req.params.id);
 
-    if (!product || !product.isActive) {
-      return res.status(404).json({ message: "Product not found or inactive" });
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
     }
 
     return res.status(200).json(product);
@@ -73,7 +73,7 @@ export const getProductById = async (req: Request, res: Response): Promise<any> 
 export const getProductByCategory = async (req: Request, res: Response): Promise<any> => {
   try {
     const category = req.params.category;
-    const products = await Product.find({ category, isActive: true });
+    const products = await Product.find({ category });
 
     if (products.length === 0) {
       return res.status(404).json({ message: "No products found in this category." });
@@ -90,7 +90,7 @@ export const getProductByCategory = async (req: Request, res: Response): Promise
 export const getProductByBrand = async (req: Request, res: Response): Promise<any> => {
   try {
     const brand = req.params.brand;
-    const products = await Product.find({ brand, isActive: true });
+    const products = await Product.find({ brand });
 
     if (products.length === 0) {
       return res.status(404).json({ message: "No products found for this brand." });
@@ -109,7 +109,7 @@ export const getProductByEvent = async (req: Request, res: Response): Promise<an
     const event = req.params.event;
     console.log('Searching for event:', event); // Log the event to ensure it's a string
 
-    const products = await Product.find({ event, isActive: true });
+    const products = await Product.find({ event });
 
     if (products.length === 0) {
       return res.status(404).json({ message: "No products found for this event." });
