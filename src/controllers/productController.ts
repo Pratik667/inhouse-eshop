@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
 import Product from "../models/productModel";
 
+const escapeRegex = (value: string): string => {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+};
+
 // Create a new product
 export const createProduct = async (req: Request, res: Response): Promise<any> => {
   try {
@@ -73,7 +77,10 @@ export const getProductById = async (req: Request, res: Response): Promise<any> 
 export const getProductByCategory = async (req: Request, res: Response): Promise<any> => {
   try {
     const category = req.params.category;
-    const products = await Product.find({ category });
+    const products = await Product.find({
+      category: { $regex: new RegExp(`^${escapeRegex(category)}$`, "i") },
+      isActive: true,
+    });
 
     if (products.length === 0) {
       return res.status(404).json({ message: "No products found in this category." });
@@ -90,7 +97,10 @@ export const getProductByCategory = async (req: Request, res: Response): Promise
 export const getProductByBrand = async (req: Request, res: Response): Promise<any> => {
   try {
     const brand = req.params.brand;
-    const products = await Product.find({ brand });
+    const products = await Product.find({
+      brand: { $regex: new RegExp(`^${escapeRegex(brand)}$`, "i") },
+      isActive: true,
+    });
 
     if (products.length === 0) {
       return res.status(404).json({ message: "No products found for this brand." });
@@ -107,9 +117,10 @@ export const getProductByBrand = async (req: Request, res: Response): Promise<an
 export const getProductByEvent = async (req: Request, res: Response): Promise<any> => {
   try {
     const event = req.params.event;
-    console.log('Searching for event:', event); // Log the event to ensure it's a string
-
-    const products = await Product.find({ event });
+    const products = await Product.find({
+      event: { $regex: new RegExp(`^${escapeRegex(event)}$`, "i") },
+      isActive: true,
+    });
 
     if (products.length === 0) {
       return res.status(404).json({ message: "No products found for this event." });

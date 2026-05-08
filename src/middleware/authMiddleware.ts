@@ -46,9 +46,9 @@ export const verifyToken = async (req: IGetUserAuthInfoRequest, res: Response, n
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
-    if (user.role !== "manager") {
-      return res.status(403).json({ message: "Access denied. Manager only." });
-    }
+    // if (user.role !== "manager") {
+    //   return res.status(403).json({ message: "Access denied. Manager only." });
+    // }
     req.user = {
       id: user.id,
       name: user.name,

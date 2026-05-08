@@ -1,12 +1,12 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Types } from "mongoose";
 
 interface ICartItem {
-    product: mongoose.Schema.Types.ObjectId; // Reference to Product
+    product: Types.ObjectId; // Reference to Product
     quantity: number; // Quantity of the product in the cart
 }
 
 interface ICart extends Document {
-    user: mongoose.Schema.Types.ObjectId; // Reference to the User
+    user: Types.ObjectId; // Reference to the User
     items: ICartItem[]; // Array of cart items
     totalPrice: number; // Total price of all items in the cart
 }

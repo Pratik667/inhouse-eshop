@@ -10,6 +10,11 @@ export interface IUser extends Document {
   password: string;
   role: string;
   team: string;
+  phone?: string;
+  address?: string;
+  zipcode?: string;
+  state?: string;
+  country?: string;
   comparePassword: (password: string) => Promise<boolean>; // Method to compare password
 }
 
@@ -22,12 +27,17 @@ const userSchema: Schema = new Schema(
     password: { type: String, required: true },
     role: { type: String },
     team: { type: String },
+    phone: { type: String },
+    address: { type: String },
+    zipcode: { type: String },
+    state: { type: String },
+    country: { type: String },
   },
   { timestamps: true }
 );
 
 // Pre-save hook to auto-generate `eid` using Counter
-userSchema.pre<IUser>("save", async function (next) {
+userSchema.pre<IUser>("save", async function () {
   if (!this.eid) {
     const counter = await Counter.findOneAndUpdate(
       { name: "userEid" },
@@ -36,20 +46,19 @@ userSchema.pre<IUser>("save", async function (next) {
     );
     this.eid = counter.seq;
   }
-  next();
 });
 
 // Pre-save hook to hash password before saving it to the database
-userSchema.pre<IUser>("save", async function (next) {
+userSchema.pre<IUser>("save", async function () {
   if (this.isModified("password")) {
     const salt = await bcrypt.genSalt(10); // Generate salt
     this.password = await bcrypt.hash(this.password, salt); // Hash password
   }
-  next();
 });
 
 // Method to compare entered password with hashed password in database
 userSchema.methods.comparePassword = async function (password: string): Promise<boolean> {
+  console.log(`Password is ${password} and hashed password is ${this.password}`);
   return bcrypt.compare(password, this.password); // Compare hash with entered password
 };
 

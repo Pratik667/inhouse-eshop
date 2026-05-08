@@ -7,6 +7,11 @@ export interface IGetUserAuthInfoRequest extends Request {
     email: string;
     role: string;
     team: string;
+    phone?: string;
+    address?: string;
+    zipcode?: string;
+    state?: string;
+    country?: string;
   };
 }
 

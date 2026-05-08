@@ -1,38 +1,22 @@
-// {
-//   "compilerOptions": {
-//     "target": "ES6",
-//     "module": "commonjs",
-//     "typeRoots": ["./node_modules/@types", "./types"],
-//     "rootDir": "./src",
-//     "outDir": "./dist",
-//     "strict": true,
-//     "esModuleInterop": true,
-//     "sourceMap": false,
-//     "skipLibCheck": true
-//   },
-//   "include": ["src/**/*"],
-//   "exclude": [
-//     "node_modules"
-//   ]
-// }
 {
   "compilerOptions": {
     "target": "ES6",
-    "module": "CommonJS",
-    "moduleResolution": "node", // Important for Jest to resolve modules correctly
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "outDir": "./dist",
+    "module": "commonjs",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"
+    ],
     "rootDir": "./src",
-    "sourceMap": true // Source maps can help with debugging test failures
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "sourceMap": false,
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*"
   ],
   "exclude": [
-    "node_modules",
-    "dist"
+    "node_modules"
   ]
 }

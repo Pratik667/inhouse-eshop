@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import mongoose from "mongoose";
 import Wishlist from "../models/wishlistModel";
 import Product from "../models/productModel";
 
@@ -13,14 +14,17 @@ export const addToWishlist = async (req: Request, res: Response): Promise<any> =
       return res.status(404).json({ message: "Product not found" });
     }
 
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+    const productObjectId = new mongoose.Types.ObjectId(productId);
+
     // Find the wishlist for the user
-    let wishlist = await Wishlist.findOne({ user: userId });
+    let wishlist = await Wishlist.findOne({ user: userObjectId } as any);
 
     if (!wishlist) {
       // Create a new wishlist if none exists
       wishlist = new Wishlist({
-        user: userId,
-        items: [{ product: productId }]
+        user: userObjectId,
+        items: [{ product: productObjectId }]
       });
     } else {
       // Check if the item is already in the wishlist
@@ -31,7 +35,7 @@ export const addToWishlist = async (req: Request, res: Response): Promise<any> =
       }
 
       // Add the product to the wishlist
-      wishlist.items.push({ product: productId });
+      wishlist.items.push({ product: productObjectId });
     }
 
     // Save the wishlist
@@ -49,8 +53,10 @@ export const removeFromWishlist = async (req: Request, res: Response): Promise<a
   try {
     const { userId, productId } = req.body;
 
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+
     // Find the wishlist for the user
-    const wishlist = await Wishlist.findOne({ user: userId });
+    const wishlist = await Wishlist.findOne({ user: userObjectId } as any);
 
     if (!wishlist) {
       return res.status(404).json({ message: "Wishlist not found" });
@@ -74,8 +80,10 @@ export const getWishlist = async (req: Request, res: Response): Promise<any> => 
   try {
     const { userId } = req.params;
 
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+
     // Find the wishlist for the user
-    const wishlist = await Wishlist.findOne({ user: userId }).populate("items.product");
+    const wishlist = await Wishlist.findOne({ user: userObjectId } as any).populate("items.product");
 
     if (!wishlist) {
       return res.status(404).json({ message: "Wishlist not found" });

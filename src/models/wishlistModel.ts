@@ -1,11 +1,11 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Types } from "mongoose";
 
 interface IWishlistItem {
-  product: mongoose.Schema.Types.ObjectId; // Reference to Product
+  product: Types.ObjectId; // Reference to Product
 }
 
 interface IWishlist extends Document {
-  user: mongoose.Schema.Types.ObjectId; // Reference to the User
+  user: Types.ObjectId; // Reference to the User
   items: IWishlistItem[]; // Array of wishlist items
 }
 

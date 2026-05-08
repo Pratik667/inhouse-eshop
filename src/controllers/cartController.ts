@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import mongoose from "mongoose";
 import Cart from "../models/cartModel";
 import Product from "../models/productModel";
 
@@ -13,14 +14,17 @@ export const addToCart = async (req: Request, res: Response): Promise<any> => {
       return res.status(404).json({ message: "Product not found" });
     }
 
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+    const productObjectId = new mongoose.Types.ObjectId(productId);
+
     // Find the cart for the user
-    let cart = await Cart.findOne({ user: userId });
+    let cart = await Cart.findOne({ user: userObjectId } as any);
 
     if (!cart) {
       // Create a new cart if none exists
       cart = new Cart({
-        user: userId,
-        items: [{ product: productId, quantity }],
+        user: userObjectId,
+        items: [{ product: productObjectId, quantity }],
         totalPrice: product.price * quantity
       });
     } else {
@@ -32,7 +36,7 @@ export const addToCart = async (req: Request, res: Response): Promise<any> => {
         existingItem.quantity += quantity;
       } else {
         // Add new product to the cart
-        cart.items.push({ product: productId, quantity });
+        cart.items.push({ product: productObjectId, quantity });
       }
 
       // Recalculate the total price
@@ -61,9 +65,11 @@ export const removeFromCart = async (req: Request, res: Response): Promise<any> 
     try {
       const { userId, productId } = req.body;
   
+      const userObjectId = new mongoose.Types.ObjectId(userId);
+
       // Find the cart for the user
-      const cart = await Cart.findOne({ user: userId });
-  
+      const cart = await Cart.findOne({ user: userObjectId } as any);
+
       if (!cart) {
         return res.status(404).json({ message: "Cart not found" });
       }
@@ -96,9 +102,10 @@ export const removeFromCart = async (req: Request, res: Response): Promise<any> 
 export const getCart = async (req: Request, res: Response): Promise<any> => {
   try {
     const { userId } = req.params;
+    const userObjectId = new mongoose.Types.ObjectId(userId);
 
     // Find the cart for the user
-    const cart = await Cart.findOne({ user: userId }).populate("items.product");
+    const cart = await Cart.findOne({ user: userObjectId } as any).populate("items.product");
 
     if (!cart) {
       return res.status(404).json({ message: "Cart not found" });

@@ -157,3 +157,62 @@ export const deleteUser = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
+// get user profile
+export const getUserProfile = async (req: IGetUserAuthInfoRequest, res: Response): Promise<any> => {
+  try {
+    const loggedInUser = req.user;
+    if (!loggedInUser) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const user = await User.findById(loggedInUser.id).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    return res.status(200).json({
+      message: "User profile",
+      user,
+    });
+  }catch(error: any){
+    console.error("Error fetching user profile:", error);
+    return res.status(500).json({ message: "Server error", error: error.message });
+  }
+}
+
+export const updateUserDetails = async (req: IGetUserAuthInfoRequest, res: Response): Promise<any> => {
+   const loggedInUser = req.user;
+    const { phone, email, address, zipcode, state, country } = req.body;
+    console.log("Inside Update user details");
+  try {   
+    if (!loggedInUser) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const updates: { phone?: string; email?: string; address?: string; zipcode?: string; state?: string; country?: string } = {};
+    if (phone) updates.phone = phone;
+    if (email) updates.email = email;
+    if (address) updates.address = address;
+    if (zipcode) updates.zipcode = zipcode;
+    if (state) updates.state = state;
+    if (country) updates.country = country;
+
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({ message: "No valid fields provided for update." });
+    }
+
+    const updateUser = await User.findByIdAndUpdate(loggedInUser.id, updates,   {
+    returnDocument: 'after',
+    runValidators: true,
+  }).select("-password");
+
+    if (!updateUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({
+      message: "User Details updated successfully",
+      user: updateUser,
+    });
+  } catch (error: any) {
+    console.error("Error Updating user profile:", error);
+    return res.status(500).json({ message: "Server error", error: error.message });
+  }
+}
