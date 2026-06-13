@@ -1,27 +1,36 @@
-import jwt from "jsonwebtoken";
-import { Request, Response, NextFunction } from "express";
-import User from "../models/userModel";
-import { IGetUserAuthInfoRequest } from "../types/express";
+import jwt from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
+import User from '../models/userModel';
+import { IGetUserAuthInfoRequest } from '../types/express';
 
-export const verifyAdmin = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+export const verifyAdmin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<any> => {
   try {
-    const token = req.headers.authorization?.split(" ")[1]; // Bearer <token>
+    const token = req.headers.authorization?.split(' ')[1]; // Bearer <token>
     if (!token) {
-      return res.status(401).json({ message: "Access denied. No token provided." });
+      return res
+        .status(401)
+        .json({ message: 'Access denied. No token provided.' });
     }
 
     // Verify the token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "default_secret_key") as { id: string };
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET || 'default_secret_key'
+    ) as { id: string };
 
     // Find the user by ID from the token
     const user = await User.findById(decoded.id);
     if (!user) {
-      return res.status(404).json({ message: "User not found." });
+      return res.status(404).json({ message: 'User not found.' });
     }
 
     // Check if the user is an admin
-    if (user.role !== "admin") {
-      return res.status(403).json({ message: "Access denied. Admins only." });
+    if (user.role !== 'admin') {
+      return res.status(403).json({ message: 'Access denied. Admins only.' });
     }
 
     // Attach user to the request object
@@ -29,22 +38,31 @@ export const verifyAdmin = async (req: Request, res: Response, next: NextFunctio
 
     next(); // Proceed to the next middleware or route handler
   } catch (error) {
-    console.error("Authorization error:", error);
-    res.status(403).json({ message: "Invalid token or unauthorized access." });
+    console.error('Authorization error:', error);
+    res.status(403).json({ message: 'Invalid token or unauthorized access.' });
   }
-}
+};
 
-export const verifyToken = async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction): Promise<any> => {
+export const verifyToken = async (
+  req: IGetUserAuthInfoRequest,
+  res: Response,
+  next: NextFunction
+): Promise<any> => {
   try {
-    const token = req.headers.authorization?.split(" ")[1]; // Token in "Bearer <token>" format
+    const token = req.headers.authorization?.split(' ')[1]; // Token in "Bearer <token>" format
     if (!token) {
-      return res.status(401).json({ message: "No token provided. Unauthorized." });
+      return res
+        .status(401)
+        .json({ message: 'No token provided. Unauthorized.' });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "default_secret_key") as { id: string };
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET || 'default_secret_key'
+    ) as { id: string };
     const user = await User.findById(decoded.id);
     if (!user) {
-      return res.status(404).json({ message: "User not found." });
+      return res.status(404).json({ message: 'User not found.' });
     }
     // if (user.role !== "manager") {
     //   return res.status(403).json({ message: "Access denied. Manager only." });
@@ -59,6 +77,6 @@ export const verifyToken = async (req: IGetUserAuthInfoRequest, res: Response, n
 
     next();
   } catch (error) {
-    return res.status(401).json({ message: "Invalid token. Unauthorized." });
+    return res.status(401).json({ message: 'Invalid token. Unauthorized.' });
   }
 };

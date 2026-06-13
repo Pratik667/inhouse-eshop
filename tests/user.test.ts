@@ -1,25 +1,25 @@
-import request from "supertest";
-import app from "../src/index";
+import request from 'supertest';
+import app from '../src/index';
 
-describe("User API", () => {
-  it("should register and login a user in the test database", async () => {
+describe('User API', () => {
+  it('should register and login a user in the test database', async () => {
     const testUser = {
-      name: "Test User",
+      name: 'Test User',
       email: `testuser+${Date.now()}@example.com`,
-      password: "Password123!",
-      role: "manager",
-      team: "test-team",
+      password: 'Password123!',
+      role: 'manager',
+      team: 'test-team',
     };
 
     const registerRes = await request(app)
-      .post("/api/users/register")
+      .post('/api/users/register')
       .send(testUser);
 
     expect(registerRes.status).toBe(201);
-    expect(registerRes.body.message).toBe("User Registered");
+    expect(registerRes.body.message).toBe('User Registered');
 
     const loginRes = await request(app)
-      .post("/api/users/login")
+      .post('/api/users/login')
       .send({ email: testUser.email, password: testUser.password });
 
     expect(loginRes.status).toBe(200);

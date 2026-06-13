@@ -17,10 +17,13 @@ jest.mock('twilio', () => {
 
 import nodemailer from 'nodemailer';
 import twilio from 'twilio';
-import { sendResetPasswordEmail, sendResetPasswordSMS } from '../src/utils/notification';
+import {
+  sendResetPasswordEmail,
+  sendResetPasswordSMS,
+} from '../src/utils/notification';
 
 const nodemailerMock = ((nodemailer as any).default ?? nodemailer) as any;
-const twilioMock = (twilio as unknown) as jest.MockedFunction<any>;
+const twilioMock = twilio as unknown as jest.MockedFunction<any>;
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -37,9 +40,13 @@ describe('notification utils', () => {
     process.env.FRONTEND_URL = 'http://frontend.example';
 
     const sendMailMock = jest.fn().mockResolvedValue({});
-    (nodemailerMock.createTransport as jest.Mock).mockReturnValue({ sendMail: sendMailMock });
+    (nodemailerMock.createTransport as jest.Mock).mockReturnValue({
+      sendMail: sendMailMock,
+    });
 
-    await expect(sendResetPasswordEmail('to@example.com', 'tok123')).resolves.toBeUndefined();
+    await expect(
+      sendResetPasswordEmail('to@example.com', 'tok123')
+    ).resolves.toBeUndefined();
 
     expect(nodemailerMock.createTransport).toHaveBeenCalled();
     expect(sendMailMock).toHaveBeenCalledWith(
@@ -55,7 +62,9 @@ describe('notification utils', () => {
     delete process.env.SMTP_USER;
     delete process.env.SMTP_PASS;
 
-    await expect(sendResetPasswordEmail('a@b.com', 't')).rejects.toThrow('SMTP configuration is missing');
+    await expect(sendResetPasswordEmail('a@b.com', 't')).rejects.toThrow(
+      'SMTP configuration is missing'
+    );
   });
 
   test('sendResetPasswordSMS sends an SMS when Twilio config present', async () => {
@@ -64,11 +73,15 @@ describe('notification utils', () => {
     process.env.TWILIO_PHONE_NUMBER = '+10000000000';
 
     const messagesCreateMock = jest.fn().mockResolvedValue({ sid: 'SM123' });
-    (twilioMock as jest.Mock).mockImplementation(() => ({ messages: { create: messagesCreateMock } }));
+    (twilioMock as jest.Mock).mockImplementation(() => ({
+      messages: { create: messagesCreateMock },
+    }));
 
-    await expect(sendResetPasswordSMS('+15551234567', 'tok123')).resolves.toBeUndefined();
+    await expect(
+      sendResetPasswordSMS('+15551234567', 'tok123')
+    ).resolves.toBeUndefined();
 
-    expect((twilioMock as jest.Mock)).toHaveBeenCalled();
+    expect(twilioMock as jest.Mock).toHaveBeenCalled();
     expect(messagesCreateMock).toHaveBeenCalledWith(
       expect.objectContaining({
         to: '+15551234567',
@@ -82,6 +95,8 @@ describe('notification utils', () => {
     delete process.env.TWILIO_AUTH_TOKEN;
     delete process.env.TWILIO_PHONE_NUMBER;
 
-    await expect(sendResetPasswordSMS('+1', 't')).rejects.toThrow('Twilio configuration is missing');
+    await expect(sendResetPasswordSMS('+1', 't')).rejects.toThrow(
+      'Twilio configuration is missing'
+    );
   });
 });

@@ -1,12 +1,15 @@
-import { Request, Response } from "express";
-import Product from "../models/productModel";
+import { Request, Response } from 'express';
+import Product from '../models/productModel';
 
 const escapeRegex = (value: string): string => {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 };
 
 // Create a new product
-export const createProduct = async (req: Request, res: Response): Promise<any> => {
+export const createProduct = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
   try {
     const {
       name,
@@ -39,123 +42,163 @@ export const createProduct = async (req: Request, res: Response): Promise<any> =
 
     await product.save(); // Save the product to the database
 
-    return res.status(201).json({ message: "Product created successfully", product });
+    return res
+      .status(201)
+      .json({ message: 'Product created successfully', product });
   } catch (error: any) {
-    console.error("Error creating product:", error);
-    return res.status(500).json({ message: "Server error", error: error.message });
+    console.error('Error creating product:', error);
+    return res
+      .status(500)
+      .json({ message: 'Server error', error: error.message });
   }
 };
 
 // Get all products
-export const getAllProducts = async (_req: Request, res: Response): Promise<any> => {
+export const getAllProducts = async (
+  _req: Request,
+  res: Response
+): Promise<any> => {
   try {
     const products = await Product.find();
     return res.status(200).json(products);
   } catch (error: any) {
-    console.error("Error fetching products:", error);
-    return res.status(500).json({ message: "Server error", error: error.message });
+    console.error('Error fetching products:', error);
+    return res
+      .status(500)
+      .json({ message: 'Server error', error: error.message });
   }
 };
 
 // Get a single product by ID
-export const getProductById = async (req: Request, res: Response): Promise<any> => {
+export const getProductById = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
   try {
     const productIdRaw = req.params.id;
-    const productId = Array.isArray(productIdRaw) ? productIdRaw[0] : productIdRaw;
+    const productId = Array.isArray(productIdRaw)
+      ? productIdRaw[0]
+      : productIdRaw;
     if (!productId) {
-      return res.status(400).json({ message: "Product ID is required" });
+      return res.status(400).json({ message: 'Product ID is required' });
     }
 
     const product = await Product.findById(productId);
 
     if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(404).json({ message: 'Product not found' });
     }
 
     return res.status(200).json(product);
   } catch (error: any) {
-    console.error("Error fetching product:", error);
-    return res.status(500).json({ message: "Server error", error: error.message });
+    console.error('Error fetching product:', error);
+    return res
+      .status(500)
+      .json({ message: 'Server error', error: error.message });
   }
 };
 
 // Get product by category
-export const getProductByCategory = async (req: Request, res: Response): Promise<any> => {
+export const getProductByCategory = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
   try {
     const categoryRaw = req.params.category;
     const category = Array.isArray(categoryRaw) ? categoryRaw[0] : categoryRaw;
     if (!category) {
-      return res.status(400).json({ message: "Category is required" });
+      return res.status(400).json({ message: 'Category is required' });
     }
 
     const products = await Product.find({
-      category: { $regex: new RegExp(`^${escapeRegex(category)}$`, "i") },
+      category: { $regex: new RegExp(`^${escapeRegex(category)}$`, 'i') },
       isActive: true,
     });
 
     if (products.length === 0) {
-      return res.status(404).json({ message: "No products found in this category." });
+      return res
+        .status(404)
+        .json({ message: 'No products found in this category.' });
     }
 
     return res.status(200).json(products);
   } catch (error: any) {
-    console.error("Error fetching products by category:", error);
-    return res.status(500).json({ message: "Server error", error: error.message });
+    console.error('Error fetching products by category:', error);
+    return res
+      .status(500)
+      .json({ message: 'Server error', error: error.message });
   }
 };
 
 // Get product by brand
-export const getProductByBrand = async (req: Request, res: Response): Promise<any> => {
+export const getProductByBrand = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
   try {
     const brandRaw = req.params.brand;
     const brand = Array.isArray(brandRaw) ? brandRaw[0] : brandRaw;
     if (!brand) {
-      return res.status(400).json({ message: "Brand is required" });
+      return res.status(400).json({ message: 'Brand is required' });
     }
 
     const products = await Product.find({
-      brand: { $regex: new RegExp(`^${escapeRegex(brand)}$`, "i") },
+      brand: { $regex: new RegExp(`^${escapeRegex(brand)}$`, 'i') },
       isActive: true,
     });
 
     if (products.length === 0) {
-      return res.status(404).json({ message: "No products found for this brand." });
+      return res
+        .status(404)
+        .json({ message: 'No products found for this brand.' });
     }
 
     return res.status(200).json(products);
   } catch (error: any) {
-    console.error("Error fetching products by brand:", error);
-    return res.status(500).json({ message: "Server error", error: error.message });
+    console.error('Error fetching products by brand:', error);
+    return res
+      .status(500)
+      .json({ message: 'Server error', error: error.message });
   }
 };
 
 // Get product by event
-export const getProductByEvent = async (req: Request, res: Response): Promise<any> => {
+export const getProductByEvent = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
   try {
     const eventRaw = req.params.event;
     const event = Array.isArray(eventRaw) ? eventRaw[0] : eventRaw;
     if (!event) {
-      return res.status(400).json({ message: "Event is required" });
+      return res.status(400).json({ message: 'Event is required' });
     }
 
     const products = await Product.find({
-      event: { $regex: new RegExp(`^${escapeRegex(event)}$`, "i") },
+      event: { $regex: new RegExp(`^${escapeRegex(event)}$`, 'i') },
       isActive: true,
     });
 
     if (products.length === 0) {
-      return res.status(404).json({ message: "No products found for this event." });
+      return res
+        .status(404)
+        .json({ message: 'No products found for this event.' });
     }
 
     return res.status(200).json(products);
   } catch (error: any) {
-    console.error("Error fetching products by event:", error);
-    return res.status(500).json({ message: "Server error", error: error.message });
+    console.error('Error fetching products by event:', error);
+    return res
+      .status(500)
+      .json({ message: 'Server error', error: error.message });
   }
 };
 
 // Update a product by ID
-export const updateProduct = async (req: Request, res: Response): Promise<any> => {
+export const updateProduct = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
   try {
     const {
       name,
@@ -171,9 +214,11 @@ export const updateProduct = async (req: Request, res: Response): Promise<any> =
     } = req.body;
 
     const productIdRaw = req.params.id;
-    const productId = Array.isArray(productIdRaw) ? productIdRaw[0] : productIdRaw;
+    const productId = Array.isArray(productIdRaw)
+      ? productIdRaw[0]
+      : productIdRaw;
     if (!productId) {
-      return res.status(400).json({ message: "Product ID is required" });
+      return res.status(400).json({ message: 'Product ID is required' });
     }
 
     const product = await Product.findByIdAndUpdate(
@@ -194,23 +239,32 @@ export const updateProduct = async (req: Request, res: Response): Promise<any> =
     );
 
     if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(404).json({ message: 'Product not found' });
     }
 
-    return res.status(200).json({ message: "Product updated successfully", product });
+    return res
+      .status(200)
+      .json({ message: 'Product updated successfully', product });
   } catch (error: any) {
-    console.error("Error updating product:", error);
-    return res.status(500).json({ message: "Server error", error: error.message });
+    console.error('Error updating product:', error);
+    return res
+      .status(500)
+      .json({ message: 'Server error', error: error.message });
   }
 };
 
 // Soft delete a product (set isActive to false)
-export const deleteProduct = async (req: Request, res: Response): Promise<any> => {
+export const deleteProduct = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
   try {
     const productIdRaw = req.params.id;
-    const productId = Array.isArray(productIdRaw) ? productIdRaw[0] : productIdRaw;
+    const productId = Array.isArray(productIdRaw)
+      ? productIdRaw[0]
+      : productIdRaw;
     if (!productId) {
-      return res.status(400).json({ message: "Product ID is required" });
+      return res.status(400).json({ message: 'Product ID is required' });
     }
 
     const product = await Product.findByIdAndUpdate(
@@ -220,12 +274,16 @@ export const deleteProduct = async (req: Request, res: Response): Promise<any> =
     );
 
     if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(404).json({ message: 'Product not found' });
     }
 
-    return res.status(200).json({ message: "Product deactivated successfully", product });
+    return res
+      .status(200)
+      .json({ message: 'Product deactivated successfully', product });
   } catch (error: any) {
-    console.error("Error deactivating product:", error);
-    return res.status(500).json({ message: "Server error", error: error.message });
+    console.error('Error deactivating product:', error);
+    return res
+      .status(500)
+      .json({ message: 'Server error', error: error.message });
   }
 };

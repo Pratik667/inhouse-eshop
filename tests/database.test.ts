@@ -7,7 +7,9 @@ describe('connectDB', () => {
     process.env.NODE_ENV = 'test';
     process.env.MONGO_URI_TEST = 'mongodb://test-host';
 
-    const connectMock = jest.fn().mockResolvedValue({ connection: { host: 'test-host' } });
+    const connectMock = jest
+      .fn()
+      .mockResolvedValue({ connection: { host: 'test-host' } });
     jest.doMock('mongoose', () => ({ connect: connectMock }));
 
     const connectDB = (await import('../src/config/database')).default;

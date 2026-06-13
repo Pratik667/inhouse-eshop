@@ -26,7 +26,9 @@ describe('auth middleware', () => {
   });
 
   test('verifyAdmin: invalid token returns 403', async () => {
-    (jwt.verify as jest.Mock).mockImplementation(() => { throw new Error('bad'); });
+    (jwt.verify as jest.Mock).mockImplementation(() => {
+      throw new Error('bad');
+    });
     const req: any = { headers: { authorization: 'Bearer bad' } };
     const res = makeRes();
     const next = jest.fn();
@@ -78,7 +80,9 @@ describe('auth middleware', () => {
   });
 
   test('verifyToken: invalid token returns 401', async () => {
-    (jwt.verify as jest.Mock).mockImplementation(() => { throw new Error('bad'); });
+    (jwt.verify as jest.Mock).mockImplementation(() => {
+      throw new Error('bad');
+    });
     const req: any = { headers: { authorization: 'Bearer bad' } };
     const res = makeRes();
     const next = jest.fn();
@@ -89,7 +93,13 @@ describe('auth middleware', () => {
 
   test('verifyToken: valid token and user found calls next and sets req.user', async () => {
     (jwt.verify as jest.Mock).mockReturnValue({ id: 'u1' });
-    (User.findById as jest.Mock).mockResolvedValue({ id: 'u1', name: 'n', email: 'e', role: 'manager', team: 't' });
+    (User.findById as jest.Mock).mockResolvedValue({
+      id: 'u1',
+      name: 'n',
+      email: 'e',
+      role: 'manager',
+      team: 't',
+    });
     const req: any = { headers: { authorization: 'Bearer tok' } };
     const res = makeRes();
     const next = jest.fn();

@@ -1,6 +1,9 @@
 import { registerUser, loginUser } from '../src/controllers/userController';
 
-jest.mock('../src/models/userModel', () => ({ __esModule: true, default: { findOne: jest.fn(), create: jest.fn() } }));
+jest.mock('../src/models/userModel', () => ({
+  __esModule: true,
+  default: { findOne: jest.fn(), create: jest.fn() },
+}));
 jest.mock('jsonwebtoken', () => ({ sign: jest.fn().mockReturnValue('tok') }));
 
 import User from '../src/models/userModel';
@@ -43,7 +46,10 @@ describe('userController: register and login', () => {
   });
 
   test('loginUser returns 200 and sets header on success', async () => {
-    const fakeUser: any = { _id: 'u1', comparePassword: jest.fn().mockResolvedValue(true) };
+    const fakeUser: any = {
+      _id: 'u1',
+      comparePassword: jest.fn().mockResolvedValue(true),
+    };
     (User as any).findOne.mockResolvedValue(fakeUser);
     const req: any = { body: { email: 'x', password: 'p' } };
     const res = makeRes();

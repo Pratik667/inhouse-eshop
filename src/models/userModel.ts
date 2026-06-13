@@ -1,6 +1,6 @@
-import mongoose, { Schema, Document } from "mongoose";
-import Counter from "./counterModel";
-import bcrypt from "bcryptjs";
+import mongoose, { Schema, Document } from 'mongoose';
+import Counter from './counterModel';
+import bcrypt from 'bcryptjs';
 
 // Define an interface for the User document
 export interface IUser extends Document {
@@ -41,10 +41,10 @@ const userSchema: Schema = new Schema(
 );
 
 // Pre-save hook to auto-generate `eid` using Counter
-userSchema.pre<IUser>("save", async function () {
+userSchema.pre<IUser>('save', async function () {
   if (!this.eid) {
     const counter = await Counter.findOneAndUpdate(
-      { name: "userEid" },
+      { name: 'userEid' },
       { $inc: { seq: 1 } },
       { new: true, upsert: true }
     );
@@ -53,19 +53,23 @@ userSchema.pre<IUser>("save", async function () {
 });
 
 // Pre-save hook to hash password before saving it to the database
-userSchema.pre<IUser>("save", async function () {
-  if (this.isModified("password")) {
+userSchema.pre<IUser>('save', async function () {
+  if (this.isModified('password')) {
     const salt = await bcrypt.genSalt(10); // Generate salt
     this.password = await bcrypt.hash(this.password, salt); // Hash password
   }
 });
 
 // Method to compare entered password with hashed password in database
-userSchema.methods.comparePassword = async function (password: string): Promise<boolean> {
-  console.log(`Password is ${password} and hashed password is ${this.password}`);
+userSchema.methods.comparePassword = async function (
+  password: string
+): Promise<boolean> {
+  console.log(
+    `Password is ${password} and hashed password is ${this.password}`
+  );
   return bcrypt.compare(password, this.password); // Compare hash with entered password
 };
 
-const User = mongoose.model<IUser>("User", userSchema);
+const User = mongoose.model<IUser>('User', userSchema);
 
 export default User;

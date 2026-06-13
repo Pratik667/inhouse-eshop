@@ -1,6 +1,9 @@
 import { addToCart } from '../src/controllers/cartController';
 
-jest.mock('../src/models/productModel', () => ({ __esModule: true, default: { findById: jest.fn() } }));
+jest.mock('../src/models/productModel', () => ({
+  __esModule: true,
+  default: { findById: jest.fn() },
+}));
 jest.mock('../src/models/cartModel', () => {
   const findOne = jest.fn();
   function MockCart(this: any, data: any) {
@@ -45,7 +48,13 @@ describe('cartController:addToCart', () => {
     (Product as any).findById.mockResolvedValue({ price: 10 });
     (Cart as any).findOne.mockResolvedValue(null);
 
-    const req: any = { body: { userId: '507f1f77bcf86cd799439011', productId: '507f1f77bcf86cd799439012', quantity: 2 } };
+    const req: any = {
+      body: {
+        userId: '507f1f77bcf86cd799439011',
+        productId: '507f1f77bcf86cd799439012',
+        quantity: 2,
+      },
+    };
     const res = makeRes();
     await addToCart(req, res);
 
