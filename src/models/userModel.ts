@@ -15,6 +15,8 @@ export interface IUser extends Document {
   zipcode?: string;
   state?: string;
   country?: string;
+  resetPasswordToken?: string;
+  resetPasswordExpires?: Date;
   comparePassword: (password: string) => Promise<boolean>; // Method to compare password
 }
 
@@ -32,6 +34,8 @@ const userSchema: Schema = new Schema(
     zipcode: { type: String },
     state: { type: String },
     country: { type: String },
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Date },
   },
   { timestamps: true }
 );
