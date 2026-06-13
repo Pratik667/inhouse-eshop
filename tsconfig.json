@@ -6,6 +6,7 @@
       "./node_modules/@types",
       "./types"
     ],
+    "types": ["node", "jest"],
     "rootDir": "./src",
     "outDir": "./dist",
     "strict": true,
@@ -14,7 +15,8 @@
     "skipLibCheck": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "tests/**/*"
   ],
   "exclude": [
     "node_modules"

@@ -63,7 +63,8 @@
     "typescript": "^5.8.3",
     "webpack": "^5.97.1",
     "webpack-cli": "^6.0.1",
-    "webpack-node-externals": "^3.0.0"
+    "webpack-node-externals": "^3.0.0",
+    "mongodb-memory-server": "^8.14.1"
   },
   "overrides": {
     "buffer-equal-constant-time": "file:./patches/buffer-equal-constant-time"
