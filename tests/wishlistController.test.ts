@@ -9,7 +9,10 @@ class MockedObjectId {
   }
 }
 jest.doMock('mongoose', () => ({ Types: { ObjectId: MockedObjectId } }));
-jest.doMock('../src/models/productModel', () => ({ __esModule: true, default: { findById: jest.fn() } }));
+jest.doMock('../src/models/productModel', () => ({
+  __esModule: true,
+  default: { findById: jest.fn() },
+}));
 jest.doMock('../src/models/wishlistModel', () => {
   const findOne = jest.fn();
   function MockWishlist(this: any, data: any) {
@@ -44,7 +47,12 @@ describe('wishlist:addToWishlist', () => {
 
   test('returns 404 when product not found', async () => {
     (Product as any).findById.mockResolvedValue(null);
-    const req: any = { body: { userId: '507f1f77bcf86cd799439011', productId: '507f1f77bcf86cd799439012' } };
+    const req: any = {
+      body: {
+        userId: '507f1f77bcf86cd799439011',
+        productId: '507f1f77bcf86cd799439012',
+      },
+    };
     const res = makeRes();
     await addToWishlist(req, res);
     expect(res.status).toHaveBeenCalledWith(404);

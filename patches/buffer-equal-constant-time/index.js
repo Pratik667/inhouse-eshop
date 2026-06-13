@@ -22,7 +22,7 @@ function bufferEq(a, b) {
   return c === 0;
 }
 
-bufferEq.install = function() {
+bufferEq.install = function () {
   Buffer.prototype.equal = SlowBuffer.prototype.equal = function equal(that) {
     return bufferEq(this, that);
   };
@@ -30,7 +30,7 @@ bufferEq.install = function() {
 
 var origBufEqual = Buffer.prototype.equal;
 var origSlowBufEqual = SlowBuffer.prototype.equal;
-bufferEq.restore = function() {
+bufferEq.restore = function () {
   Buffer.prototype.equal = origBufEqual;
   SlowBuffer.prototype.equal = origSlowBufEqual;
 };

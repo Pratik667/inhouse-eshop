@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document } from 'mongoose';
 
 interface ICounter extends Document {
   name: string;
@@ -10,6 +10,6 @@ const counterSchema: Schema = new Schema({
   seq: { type: Number, required: true },
 });
 
-const Counter = mongoose.model<ICounter>("Counter", counterSchema);
+const Counter = mongoose.model<ICounter>('Counter', counterSchema);
 
 export default Counter;

@@ -2,10 +2,7 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "commonjs",
-    "typeRoots": [
-      "./node_modules/@types",
-      "./types"
-    ],
+    "typeRoots": ["./node_modules/@types", "./types"],
     "types": ["node", "jest"],
     "rootDir": "./src",
     "outDir": "./dist",
@@ -14,11 +11,6 @@
     "sourceMap": false,
     "skipLibCheck": true
   },
-  "include": [
-    "src/**/*",
-    "tests/**/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src/**/*", "tests/**/*"],
+  "exclude": ["node_modules"]
 }

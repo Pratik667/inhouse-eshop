@@ -21,7 +21,7 @@ Inhouse E-Shop is a modern e-commerce platform built with **Node.js**, **Express
 
 Before you begin, ensure you have the following installed on your local machine:
 
-- **Node.js** (Version 14.x or higher)  
+- **Node.js** (Version 14.x or higher)
 - **npm** (Node Package Manager)
 - **Git** (for cloning the repository)
 
@@ -34,17 +34,18 @@ git --version
 ```
 
 ## ⚡ Getting Started
+
 Follow the steps below to set up the project locally:
 
 1. Clone the Repository
-First, clone the repository to your local machine:
+   First, clone the repository to your local machine:
 
 ```bash
 git clone https://github.com/Pratik667/inhouse-eshop.git
 ```
 
 2. Install Dependencies
-Navigate to the project directory and install all the required dependencies:
+   Navigate to the project directory and install all the required dependencies:
 
 ```bash
 Copy code
@@ -53,10 +54,12 @@ npm install
 ```
 
 ## 🚀 Run the App Locally
+
 1. Set Up Environment Variables
-Create a .env file in the root directory and add the following variables:
+   Create a .env file in the root directory and add the following variables:
 
 env
+
 ```bash
 PORT=3000
 DB_HOST=localhost
@@ -65,10 +68,11 @@ DB_PASS=password
 SECRET_KEY=your_secret_key
 JWT_SECRET=your_jwt_secret
 ```
+
 Note: Make sure you set up a MongoDB instance or change the database settings as required.
 
 2. Start the Development Server
-For development, use Nodemon to automatically restart the server on file changes:
+   For development, use Nodemon to automatically restart the server on file changes:
 
 ```bash
 Copy code
@@ -77,7 +81,7 @@ The app will be available at http://localhost:3000.
 ```
 
 3. Build & Start the Production Server
-For production, build the app and run it using Node.js:
+   For production, build the app and run it using Node.js:
 
 ```bash
 Copy code
@@ -86,7 +90,9 @@ npm start
 ```
 
 ## 🛣️ Routes
+
 User Routes
+
 - POST /api/users/register: Register a new user.
 - POST /api/users/login: Login a user.
 - GET /api/users/all-users: Get all users (Admin only).
@@ -95,6 +101,7 @@ User Routes
 - GET /api/users/team-users: Get users in the same team (Managers only).
 
 Product Routes
+
 - POST /api/products: Create a new product (Admin or Manager only).
 - GET /api/products: Get all products.
 - GET /api/products/:id: Get a product by ID.
@@ -102,29 +109,34 @@ Product Routes
 - DELETE /api/products/:id: Delete a product (Admin or Manager only).
 
 Cart Routes
+
 - POST /api/cart/add: Add a product to the Cart
 - POST /api/cart/remove: Removes a product from the cart
 - GET /api/cart/:userId: Views products inside cart using User Id.
 
 Wishlist Routes
+
 - POST /api/wishlist/add: Adds Product to wishlist
 - POST /api/wishlist/remove: Removes Product from wishlist
 - GET /api/wishlist/:userId: Views products inside wishlist using User Id.
 
 ## 🗂️ Project Structure
+
 The project structure is organized into several key folders and files:
 
 bash
 Copy code
+
 - /src
-  - /controllers  # Logic for handling user and product routes
-  - /models       # Mongoose models for MongoDB
-  - /routes       # Routes for users and products
-  - /middleware   # Middleware for authentication and authorization
-  - /config       # Configuration files
-- /dist           # Compiled JavaScript code (after build)
+  - /controllers # Logic for handling user and product routes
+  - /models # Mongoose models for MongoDB
+  - /routes # Routes for users and products
+  - /middleware # Middleware for authentication and authorization
+  - /config # Configuration files
+- /dist # Compiled JavaScript code (after build)
 
 ## 🧑‍💻 Technologies Used
+
 - **Node.js**: Backend framework for server-side development.
 - **Express.js**: Web framework to handle HTTP requests and routing.
 - **MongoDB**: NoSQL database for storing user and product data.
@@ -136,23 +148,27 @@ Copy code
 - **Jest**: For Test Coverage.
 
 ## 🤝 Contributing
+
 Contributions are welcome! Here's how you can help:
 
 Fork the repository.
+
 ```bash
 Create a new branch (git checkout -b feature-name).
 Make your changes and commit them.
 Push to the branch (git push origin feature-name).
 Open a pull request.
 ```
+
 Please ensure your code follows the project’s code style and includes tests.
 
 ## 📄 License
+
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## 🔗 Contact
+
 - **Author**: Pratik667
 - **Email**: mandlik.pratik06@gmail.com
-
 
 ---

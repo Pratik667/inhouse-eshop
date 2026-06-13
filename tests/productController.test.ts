@@ -1,6 +1,9 @@
 import { getProductByCategory } from '../src/controllers/productController';
 
-jest.mock('../src/models/productModel', () => ({ __esModule: true, default: { find: jest.fn(), findById: jest.fn() } }));
+jest.mock('../src/models/productModel', () => ({
+  __esModule: true,
+  default: { find: jest.fn(), findById: jest.fn() },
+}));
 import Product from '../src/models/productModel';
 
 const makeRes = () => {

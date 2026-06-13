@@ -1,20 +1,32 @@
-import express from "express";
-import { registerUser, loginUser, forgotPassword, resetPassword, allUsers, getUserByID, updateUser, getUsersInSameTeam, deleteUser, getUserProfile, updateUserDetails } from "../controllers/userController";
-import { verifyAdmin, verifyToken } from "../middleware/authMiddleware";
+import express from 'express';
+import {
+  registerUser,
+  loginUser,
+  forgotPassword,
+  resetPassword,
+  allUsers,
+  getUserByID,
+  updateUser,
+  getUsersInSameTeam,
+  deleteUser,
+  getUserProfile,
+  updateUserDetails,
+} from '../controllers/userController';
+import { verifyAdmin, verifyToken } from '../middleware/authMiddleware';
 const router = express.Router();
 
-console.log("Inside User Routes");
+console.log('Inside User Routes');
 // Explicitly passing the controller function
-router.post("/register", registerUser);
-router.post("/login", loginUser);
-router.post("/forgot-password", forgotPassword);
-router.post("/reset-password", resetPassword);
-router.get("/all-users", verifyAdmin, allUsers); //admin only
-router.get("/:userId", verifyAdmin, getUserByID); //admin only
-router.patch("/update-user/:userId", verifyAdmin, updateUser); //admin only
-router.delete("/delete-user/:userId", verifyAdmin, deleteUser); //admin only
-router.get("/team-users", verifyToken, getUsersInSameTeam); //role: managers only
-router.post("/get-profile", verifyToken,getUserProfile); 
-router.post("/update-details", verifyToken, updateUserDetails)
+router.post('/register', registerUser);
+router.post('/login', loginUser);
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password', resetPassword);
+router.get('/all-users', verifyAdmin, allUsers); //admin only
+router.get('/:userId', verifyAdmin, getUserByID); //admin only
+router.patch('/update-user/:userId', verifyAdmin, updateUser); //admin only
+router.delete('/delete-user/:userId', verifyAdmin, deleteUser); //admin only
+router.get('/team-users', verifyToken, getUsersInSameTeam); //role: managers only
+router.post('/get-profile', verifyToken, getUserProfile);
+router.post('/update-details', verifyToken, updateUserDetails);
 
 export default router;

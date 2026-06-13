@@ -1,4 +1,4 @@
-import { Request } from "express";
+import { Request } from 'express';
 
 export interface IGetUserAuthInfoRequest extends Request {
   user?: {
@@ -14,4 +14,3 @@ export interface IGetUserAuthInfoRequest extends Request {
     country?: string;
   };
 }
-
