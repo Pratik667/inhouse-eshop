@@ -60,7 +60,13 @@ export const getAllProducts = async (_req: Request, res: Response): Promise<any>
 // Get a single product by ID
 export const getProductById = async (req: Request, res: Response): Promise<any> => {
   try {
-    const product = await Product.findById(req.params.id);
+    const productIdRaw = req.params.id;
+    const productId = Array.isArray(productIdRaw) ? productIdRaw[0] : productIdRaw;
+    if (!productId) {
+      return res.status(400).json({ message: "Product ID is required" });
+    }
+
+    const product = await Product.findById(productId);
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
@@ -76,7 +82,12 @@ export const getProductById = async (req: Request, res: Response): Promise<any> 
 // Get product by category
 export const getProductByCategory = async (req: Request, res: Response): Promise<any> => {
   try {
-    const category = req.params.category;
+    const categoryRaw = req.params.category;
+    const category = Array.isArray(categoryRaw) ? categoryRaw[0] : categoryRaw;
+    if (!category) {
+      return res.status(400).json({ message: "Category is required" });
+    }
+
     const products = await Product.find({
       category: { $regex: new RegExp(`^${escapeRegex(category)}$`, "i") },
       isActive: true,
@@ -96,7 +107,12 @@ export const getProductByCategory = async (req: Request, res: Response): Promise
 // Get product by brand
 export const getProductByBrand = async (req: Request, res: Response): Promise<any> => {
   try {
-    const brand = req.params.brand;
+    const brandRaw = req.params.brand;
+    const brand = Array.isArray(brandRaw) ? brandRaw[0] : brandRaw;
+    if (!brand) {
+      return res.status(400).json({ message: "Brand is required" });
+    }
+
     const products = await Product.find({
       brand: { $regex: new RegExp(`^${escapeRegex(brand)}$`, "i") },
       isActive: true,
@@ -116,7 +132,12 @@ export const getProductByBrand = async (req: Request, res: Response): Promise<an
 // Get product by event
 export const getProductByEvent = async (req: Request, res: Response): Promise<any> => {
   try {
-    const event = req.params.event;
+    const eventRaw = req.params.event;
+    const event = Array.isArray(eventRaw) ? eventRaw[0] : eventRaw;
+    if (!event) {
+      return res.status(400).json({ message: "Event is required" });
+    }
+
     const products = await Product.find({
       event: { $regex: new RegExp(`^${escapeRegex(event)}$`, "i") },
       isActive: true,
@@ -149,8 +170,14 @@ export const updateProduct = async (req: Request, res: Response): Promise<any> =
       isActive,
     } = req.body;
 
+    const productIdRaw = req.params.id;
+    const productId = Array.isArray(productIdRaw) ? productIdRaw[0] : productIdRaw;
+    if (!productId) {
+      return res.status(400).json({ message: "Product ID is required" });
+    }
+
     const product = await Product.findByIdAndUpdate(
-      req.params.id,
+      productId,
       {
         name,
         description,
@@ -180,8 +207,14 @@ export const updateProduct = async (req: Request, res: Response): Promise<any> =
 // Soft delete a product (set isActive to false)
 export const deleteProduct = async (req: Request, res: Response): Promise<any> => {
   try {
+    const productIdRaw = req.params.id;
+    const productId = Array.isArray(productIdRaw) ? productIdRaw[0] : productIdRaw;
+    if (!productId) {
+      return res.status(400).json({ message: "Product ID is required" });
+    }
+
     const product = await Product.findByIdAndUpdate(
-      req.params.id,
+      productId,
       { isActive: false }, // Set isActive to false (soft delete)
       { new: true }
     );

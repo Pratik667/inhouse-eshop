@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import User from "../models/userModel";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
+import { sendResetPasswordEmail, sendResetPasswordSMS } from "../utils/notification";
 import { IGetUserAuthInfoRequest } from "../types/express";
 
 export const registerUser = async (req: Request, res: Response): Promise<any> => {
@@ -70,9 +72,14 @@ export const allUsers = async (req: Request, res: Response): Promise<any> => {
 
 // Controller to update email, name, role and team of a user
 export const updateUser = async (req: Request, res: Response): Promise<any> => {
-  const { userId } = req.params;
+  const userIdRaw = req.params.userId;
+  const userId = Array.isArray(userIdRaw) ? userIdRaw[0] : userIdRaw;
   const { name, email, role, team } = req.body;
   try {
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
     // Validate userId
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({ message: "Invalid user ID format" });
@@ -123,8 +130,13 @@ export const getUsersInSameTeam = async (req: IGetUserAuthInfoRequest, res: Resp
 };
 
 export const getUserByID= async (req: Request, res: Response): Promise<any> => {
-  const { userId } = req.params;
+  const userIdRaw = req.params.userId;
+  const userId = Array.isArray(userIdRaw) ? userIdRaw[0] : userIdRaw;
   try {
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
     const user = await User.findById(userId);
     res.status(200).json({
       message: user
@@ -137,8 +149,13 @@ export const getUserByID= async (req: Request, res: Response): Promise<any> => {
 
 //delete user by id
 export const deleteUser = async (req: Request, res: Response): Promise<any> => {
-  const { userId } = req.params;
+  const userIdRaw = req.params.userId;
+  const userId = Array.isArray(userIdRaw) ? userIdRaw[0] : userIdRaw;
   try {
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
     // Validate userId
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({ message: "Invalid user ID format" });
@@ -216,3 +233,92 @@ export const updateUserDetails = async (req: IGetUserAuthInfoRequest, res: Respo
     return res.status(500).json({ message: "Server error", error: error.message });
   }
 }
+export const forgotPassword = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const resetToken = crypto.randomBytes(20).toString("hex");
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+    await user.save();
+
+    const sendMethods: string[] = [];
+    if (user.email) {
+      try {
+        await sendResetPasswordEmail(user.email, resetToken);
+        sendMethods.push("email");
+      } catch (sendError) {
+        console.error("Failed to send reset email:", sendError);
+      }
+    }
+
+    if (user.phone) {
+      try {
+        await sendResetPasswordSMS(user.phone, resetToken);
+        sendMethods.push("sms");
+      } catch (sendError) {
+        console.error("Failed to send reset SMS:", sendError);
+      }
+    }
+
+    if (sendMethods.length === 0) {
+      return res.status(200).json({
+        message: "Password reset token generated. No delivery method configured.",
+        resetToken,
+        expiresAt: user.resetPasswordExpires,
+      });
+    }
+
+    return res.status(200).json({
+      message: `Password reset instructions sent via ${sendMethods.join(" and ")}.`,
+      resetToken,
+      expiresAt: user.resetPasswordExpires,
+    });
+  } catch (error: any) {
+    console.error("Forgot password error:", error);
+    return res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+export const resetPassword = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { email, token, password, newPassword } = req.body;
+    const updatedPassword = password || newPassword;
+
+    if (!token || !updatedPassword) {
+      return res.status(400).json({ message: "Token and new password are required" });
+    }
+
+    const query: Record<string, any> = {
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: new Date() },
+    };
+    if (email) {
+      query.email = email;
+    }
+
+    const user = await User.findOne(query);
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired token" });
+    }
+
+    user.password = updatedPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    return res.status(200).json({ message: "Password reset successful" });
+  } catch (error: any) {
+    console.error("Reset password error:", error);
+    return res.status(500).json({ message: "Server error", error: error.message });
+  }
+};

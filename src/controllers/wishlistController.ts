@@ -6,7 +6,14 @@ import Product from "../models/productModel";
 // Add item to wishlist
 export const addToWishlist = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { userId, productId } = req.body;
+    const userIdRaw = req.body.userId;
+    const productIdRaw = req.body.productId;
+    const userId = Array.isArray(userIdRaw) ? userIdRaw[0] : userIdRaw;
+    const productId = Array.isArray(productIdRaw) ? productIdRaw[0] : productIdRaw;
+
+    if (!userId || !productId) {
+      return res.status(400).json({ message: "userId and productId are required" });
+    }
 
     // Find the product
     const product = await Product.findById(productId);
@@ -51,7 +58,14 @@ export const addToWishlist = async (req: Request, res: Response): Promise<any> =
 // Remove item from wishlist
 export const removeFromWishlist = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { userId, productId } = req.body;
+    const userIdRaw = req.body.userId;
+    const productIdRaw = req.body.productId;
+    const userId = Array.isArray(userIdRaw) ? userIdRaw[0] : userIdRaw;
+    const productId = Array.isArray(productIdRaw) ? productIdRaw[0] : productIdRaw;
+
+    if (!userId || !productId) {
+      return res.status(400).json({ message: "userId and productId are required" });
+    }
 
     const userObjectId = new mongoose.Types.ObjectId(userId);
 
@@ -78,7 +92,11 @@ export const removeFromWishlist = async (req: Request, res: Response): Promise<a
 // Get user's wishlist
 export const getWishlist = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { userId } = req.params;
+    const userIdRaw = req.params.userId;
+    const userId = Array.isArray(userIdRaw) ? userIdRaw[0] : userIdRaw;
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
 
     const userObjectId = new mongoose.Types.ObjectId(userId);
 
