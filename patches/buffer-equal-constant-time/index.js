@@ -1,7 +1,6 @@
 /*jshint node:true */
 'use strict';
-var Buffer = require('buffer').Buffer; // browserify
-var SlowBuffer = require('buffer').SlowBuffer || Buffer;
+const SlowBuffer = require('buffer').SlowBuffer || Buffer;
 
 module.exports = bufferEq;
 
@@ -14,8 +13,8 @@ function bufferEq(a, b) {
     return false;
   }
 
-  var c = 0;
-  for (var i = 0; i < a.length; i++) {
+  let c = 0;
+  for (let i = 0; i < a.length; i++) {
     /*jshint bitwise:false */
     c |= a[i] ^ b[i];
   }
@@ -28,8 +27,8 @@ bufferEq.install = function () {
   };
 };
 
-var origBufEqual = Buffer.prototype.equal;
-var origSlowBufEqual = SlowBuffer.prototype.equal;
+const origBufEqual = Buffer.prototype.equal;
+const origSlowBufEqual = SlowBuffer.prototype.equal;
 bufferEq.restore = function () {
   Buffer.prototype.equal = origBufEqual;
   SlowBuffer.prototype.equal = origSlowBufEqual;

@@ -1,8 +1,21 @@
-import js from '@eslint/js';
+const js = require('@eslint/js');
 
-export default [
+module.exports = [
   js.configs.recommended,
   {
+    languageOptions: {
+      ecmaVersion: 2021,
+      sourceType: 'script',
+      globals: {
+        require: 'readonly',
+        module: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+        exports: 'readonly',
+        process: 'readonly',
+        Buffer: 'readonly',
+      },
+    },
     rules: {
       // Code quality
       'no-unused-vars': 'warn',
@@ -18,7 +31,7 @@ export default [
       'prettier/prettier': 'error',
     },
     plugins: {
-      prettier: (await import('eslint-plugin-prettier')).default,
+      prettier: require('eslint-plugin-prettier'),
     },
   },
 ];
