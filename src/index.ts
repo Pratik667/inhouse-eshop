@@ -27,9 +27,10 @@ if (process.env.NODE_ENV !== 'test') {
 //cors issue fix - on localhost, the frontend runs on a different port (e.g., 5173) than the backend (e.g., 5000), which is considered a different origin. To allow the frontend to communicate with the backend without being blocked by CORS policy, we need to enable CORS in our Express server.
 const cors = require('cors');
 
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: FRONTEND_URL,
     credentials: true,
   })
 );
