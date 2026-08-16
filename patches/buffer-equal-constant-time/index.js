@@ -27,8 +27,10 @@ bufferEq.install = function () {
   };
 };
 
-const origBufEqual = Buffer.prototype.equal;
-const origSlowBufEqual = SlowBuffer.prototype.equal;
+
+var origBufEqual = Buffer.prototype.equal;
+var origSlowBufEqual = SlowBuffer.prototype.equal;
+
 bufferEq.restore = function () {
   Buffer.prototype.equal = origBufEqual;
   SlowBuffer.prototype.equal = origSlowBufEqual;
