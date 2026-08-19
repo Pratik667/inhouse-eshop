@@ -4,8 +4,10 @@ services:
     env: node
     plan: free
     branch: main
-    buildCommand: npm install && npm run build
+    buildCommand: npm ci && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NODE_OPTIONS
+        value: --max_old_space_size=1024
