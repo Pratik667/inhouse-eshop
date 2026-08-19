@@ -12,4 +12,4 @@ services:
       - key: NODE_OPTIONS
         value: --max_old_space_size=1024
       - key: FRONTEND_URL
-        value: https://jinstoremax.netlify.app
+        value: https://jinstoremax.netlify.app,https://mybackoffice.netlify.app
