@@ -6,6 +6,7 @@ import productRoutes from './routes/productRoutes';
 import cartRoutes from './routes/cartRoutes';
 import wishlistRoutes from './routes/wishlistRoutes';
 import healthRoutes from './routes/healthRoutes';
+import flightSubscriptionRoutes from './routes/flightSubscriptionRoutes';
 import serverless from 'serverless-http';
 const dns = require('node:dns');
 dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
@@ -44,6 +45,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes); // Product routes
 app.use('/api/cart', cartRoutes);
 app.use('/api/wishlist', wishlistRoutes);
+app.use('/api/flights', flightSubscriptionRoutes);
 app.use('/health', healthRoutes);
 app.get('/', (req: any, res: any) => res.send('Hello from AWS Lambda!'));
 app.use((err: any, req: any, res: any, next: any) => {
