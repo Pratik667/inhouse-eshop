@@ -8,6 +8,7 @@ import wishlistRoutes from './routes/wishlistRoutes';
 import healthRoutes from './routes/healthRoutes';
 import flightSubscriptionRoutes from './routes/flightSubscriptionRoutes';
 import serverless from 'serverless-http';
+import path from 'path';
 const dns = require('node:dns');
 dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
 
@@ -47,6 +48,7 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/flights', flightSubscriptionRoutes);
 app.use('/health', healthRoutes);
+app.use('/flights', express.static(path.join(process.cwd(), 'src', 'Flight')));
 app.get('/', (req: any, res: any) => res.send('Hello from AWS Lambda!'));
 app.use((err: any, req: any, res: any, next: any) => {
   console.error(err.stack);
