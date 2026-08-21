@@ -48,7 +48,9 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/flights', flightSubscriptionRoutes);
 app.use('/health', healthRoutes);
-app.use('/flights', express.static(path.join(process.cwd(), 'src', 'Flight')));
+const flightUiPath = path.join(__dirname, '..', 'src', 'Flight');
+app.get('/flights', (_req: any, res: any) => res.redirect('/flights/'));
+app.use('/flights', express.static(flightUiPath));
 app.get('/', (req: any, res: any) => res.send('Hello from AWS Lambda!'));
 app.use((err: any, req: any, res: any, next: any) => {
   console.error(err.stack);
