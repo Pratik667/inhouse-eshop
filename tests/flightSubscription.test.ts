@@ -58,4 +58,25 @@ describe('Flight subscription API', () => {
     expect(response.status).toBe(400);
     expect(response.body.message).toBe('date must use YYYY-MM-DD format');
   });
+
+  it('does not select a cheaper SpiceJet flight when another airline is available', async () => {
+    process.env.SERP_API_KEY = 'test-key';
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue({
+        best_flights: [
+          { price: 2500, flights: [{ airline: 'SpiceJet' }] },
+          { price: 5200, flights: [{ airline: 'Air India' }] },
+        ],
+      }),
+    }) as unknown as typeof fetch;
+
+    const response = await request(app)
+      .post('/api/flights/subscribe')
+      .send({ from: 'BOM', to: 'DEL', date: '2026-11-15' });
+
+    expect(response.status).toBe(201);
+    expect(response.body.subscription.currentPrice).toBe(5200);
+    expect(response.body.subscription.flightResponse.best_flights).toHaveLength(2);
+  });
 });

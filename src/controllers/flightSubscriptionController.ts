@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import mongoose from 'mongoose';
 import FlightSubscription from '../models/flightSubscriptionModel';
 
 const IATA_PATTERN = /^[A-Za-z]{3}$/;
@@ -11,6 +10,19 @@ const getString = (value: unknown): string =>
 const isNonNegativeNumber = (value: unknown): boolean =>
   typeof value === 'number' && Number.isFinite(value) && value >= 0;
 
+const isSpiceJet = (flight: any): boolean => {
+  const airlines = [
+    flight?.airline,
+    ...(Array.isArray(flight?.flights)
+      ? flight.flights.map((leg: any) => leg?.airline)
+      : []),
+  ];
+
+  return airlines.some(
+    (airline) => typeof airline === 'string' && airline.toLowerCase().includes('spicejet')
+  );
+};
+
 const getCheapestPrice = (flightResponse: any): number | undefined => {
   const flights = [
     ...(Array.isArray(flightResponse?.best_flights)
@@ -20,7 +32,9 @@ const getCheapestPrice = (flightResponse: any): number | undefined => {
       ? flightResponse.other_flights
       : []),
   ];
-  const prices = flights
+  const preferredFlights = flights.filter((flight) => !isSpiceJet(flight));
+  const flightsToCompare = preferredFlights.length > 0 ? preferredFlights : flights;
+  const prices = flightsToCompare
     .map((flight) => flight?.price)
     .filter(isNonNegativeNumber);
 
